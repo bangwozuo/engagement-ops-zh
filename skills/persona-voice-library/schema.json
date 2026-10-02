@@ -1,0 +1,91 @@
+{
+  "skill_id": "de_media_03_sk06",
+  "name": "人设语气库",
+  "type": "atomic",
+  "input": {
+    "type": "object",
+    "required": ["voice", "drafts"],
+    "properties": {
+      "voice": {
+        "type": "object",
+        "required": ["称呼", "口头禅"],
+        "properties": {
+          "persona": {"type": "string", "description": "一句话人设"},
+          "platform": {"type": "string", "description": "平台，如 抖音"},
+          "audience": {"type": "string", "description": "受众画像"},
+          "称呼": {"type": "array", "items": {"type": "string"},
+                    "description": "称呼词表 2-4 个，按亲密度排序"},
+          "口头禅": {"type": "array", "items": {"type": "string"},
+                     "description": "口头禅词表 2-4 个"},
+          "句长上限": {"type": "integer", "description": "字/句，默认 20"},
+          "禁用词": {"type": "array", "items": {"type": "string"},
+                     "description": "与人设冲突的词"},
+          "禁用词理由": {"type": "string", "description": "禁用理由，无理由的禁用词易被解开"}
+        }
+      },
+      "drafts": {
+        "type": "array",
+        "description": "回复草稿列表",
+        "items": {
+          "type": "object",
+          "required": ["id", "text"],
+          "properties": {
+            "id": {"type": "string", "description": "草稿ID，如 D1"},
+            "comment_id": {"type": "string", "description": "对应评论ID"},
+            "text": {"type": "string", "description": "草稿文本"}
+          }
+        }
+      }
+    }
+  },
+  "output": {
+    "type": "object",
+    "required": ["summary", "items"],
+    "properties": {
+      "summary": {
+        "type": "object",
+        "description": "档案摘要 + 批次达标统计",
+        "properties": {
+          "草稿总数": {"type": "integer"},
+          "达标数": {"type": "integer"},
+          "达标率": {"type": "string"},
+          "合规否决": {"type": "integer"},
+          "达标线": {"type": "integer"}
+        }
+      },
+      "items": {
+        "type": "array",
+        "description": "逐条检查明细",
+        "items": {
+          "type": "object",
+          "properties": {
+            "草稿ID": {"type": "string"},
+            "对应评论": {"type": "string"},
+            "回复草稿": {"type": "string"},
+            "称呼分": {"type": "integer"},
+            "口头禅分": {"type": "integer"},
+            "句长分": {"type": "integer"},
+            "零违禁分": {"type": "integer"},
+            "一致性得分": {"type": "integer", "minimum": 0, "maximum": 100},
+            "判定": {"type": "string", "enum": ["达标", "不达标", "不达标（合规否决）"]},
+            "检查明细": {"type": "string"}
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "check": "scripts/voice_check.py",
+    "usage": "python3 scripts/voice_check.py --input input.json --outdir out"
+  },
+  "artifacts": ["out/语气一致性检查.xlsx", "out/voice_scores.png", "out/voice_check.json"],
+  "constraints": {
+    "pass_line": 80,
+    "score_weights": {"称呼": 40, "口头禅": 20, "句长": 20, "零违禁": 20},
+    "default_max_sentence_len": 20,
+    "stability_benchmark": "单批达标率 ≥80% 稳定；连续两批 <60% 回炉语气库",
+    "hard_veto": ["效果承诺", "绝对化用语", "站外导流", "诱导互动"],
+    "no_bypass_advice": true,
+    "human_review_required": true
+  }
+}

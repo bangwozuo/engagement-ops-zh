@@ -1,0 +1,35 @@
+{
+  "flow": "superfan-identify-flow",
+  "steps": [
+    {
+      "step": 1,
+      "skill": "fan-segmentation-tag",
+      "status": "ok",
+      "output": "out\\segment.json"
+    },
+    {
+      "step": 2,
+      "skill": "（内置）维护动作与移交清单",
+      "status": "ok",
+      "output": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\engagement-ops-zh\\workflows\\superfan-identify-flow\\out\\铁粉维护名单.xlsx"
+    }
+  ],
+  "summary": {
+    "账号": "@小鹿的好物日记",
+    "统计周数": 2.0,
+    "粉丝总数": 6,
+    "铁粉候选": 2,
+    "需安抚": 1,
+    "潜在黑粉观察": 1,
+    "TOP 10% 互动占比": "28%",
+    "基准": "1% 超级用户约贡献 90% 互动；小样本下 TOP 10% 占比 ≥ 60% 即属健康头部集中",
+    "维护动作数": 2,
+    "人工确认点": "名单移交 / 福利发放 / 私信触达 全部需人工确认，脚本与模型不执行任何触达",
+    "说明": "名单为机器统计结果；刷量号与语境由模型按 prompt.txt 复核后再进入移交环节"
+  },
+  "files": [
+    "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\engagement-ops-zh\\workflows\\superfan-identify-flow\\out\\铁粉维护名单.xlsx",
+    "out\\segment.json"
+  ],
+  "generated_at": "2026-09-30 16:03:01"
+}

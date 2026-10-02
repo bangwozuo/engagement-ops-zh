@@ -1,0 +1,32 @@
+{
+  "flow": "daily-comment-aggregate-flow",
+  "steps": [
+    {
+      "step": 1,
+      "skill": "comment-sentiment-analyze",
+      "status": "ok",
+      "output": "out\\sentiment.json"
+    },
+    {
+      "step": 2,
+      "skill": "（内置汇总）SLA 队列拆分",
+      "status": "ok",
+      "output": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\engagement-ops-zh\\workflows\\daily-comment-aggregate-flow\\out\\每日评论处理日报.xlsx"
+    }
+  ],
+  "summary": {
+    "日期": "2026-09-29",
+    "评论总数": 12,
+    "需 2 小时内处理": 5,
+    "黑粉": 2,
+    "吐槽": 3,
+    "提问": 3,
+    "赞美": 3,
+    "闲聊": 1
+  },
+  "files": [
+    "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\engagement-ops-zh\\workflows\\daily-comment-aggregate-flow\\out\\每日评论处理日报.xlsx",
+    "out\\sentiment.json"
+  ],
+  "generated_at": "2026-09-30 16:02:52"
+}

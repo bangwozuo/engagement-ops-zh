@@ -1,0 +1,118 @@
+{
+  "workflow_id": "de_media_03_wf03",
+  "name": "回复话术建议",
+  "type": "composite",
+  "trigger": "人工 / 事件（daily-comment-aggregate-flow 产出队列后）",
+  "input": {
+    "type": "object",
+    "required": ["comments", "voice", "drafts"],
+    "properties": {
+      "account": {"type": "string"},
+      "date": {"type": "string"},
+      "comments": {
+        "type": "array",
+        "description": "当日评论流",
+        "items": {
+          "type": "object",
+          "required": ["id", "user", "text"],
+          "properties": {
+            "id": {"type": "string"},
+            "user": {"type": "string"},
+            "text": {"type": "string"},
+            "likes": {"type": "integer"}
+          }
+        }
+      },
+      "voice": {
+        "type": "object",
+        "description": "语气库档案（来自 persona-voice-library）",
+        "required": ["称呼"],
+        "properties": {
+          "称呼": {"type": "array", "items": {"type": "string"}},
+          "口头禅": {"type": "array", "items": {"type": "string"}},
+          "句长上限": {"type": "integer", "default": 20},
+          "禁用词": {"type": "array", "items": {"type": "string"}}
+        }
+      },
+      "drafts": {
+        "type": "array",
+        "description": "回复草稿（模型按 reply-script-generate 生成）",
+        "items": {
+          "type": "object",
+          "required": ["id", "comment_id", "text"],
+          "properties": {
+            "id": {"type": "string"},
+            "comment_id": {"type": "string"},
+            "text": {"type": "string"}
+          }
+        }
+      }
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "skill": "comment-sentiment-analyze",
+      "script": "../../skills/comment-sentiment-analyze/scripts/sentiment_scan.py",
+      "input": "comments",
+      "output": "out/sentiment.json",
+      "on_failure": "退出码≠0 中止；全为赞美/闲聊 → 占位工单正常退出"
+    },
+    {
+      "step": 2,
+      "skill": "persona-voice-library",
+      "script": "../../skills/persona-voice-library/scripts/voice_check.py",
+      "input": "voice + drafts",
+      "output": "out/voice_check.json",
+      "on_failure": "语气库字段缺失中止列清单；草稿引用不存在评论 → 工单标「评论不存在」"
+    },
+    {
+      "step": 3,
+      "skill": "（内置）工单对齐 + reply-script-generate（缺稿生成）",
+      "input": "out/sentiment.json + out/voice_check.json",
+      "output": "out/回复工单.xlsx",
+      "on_failure": "上游产物缺失中止；草稿覆盖率<80% 标备稿不足"
+    }
+  ],
+  "output": {
+    "type": "object",
+    "required": ["summary", "steps"],
+    "properties": {
+      "summary": {
+        "type": "object",
+        "properties": {
+          "高优评论数": {"type": "integer"},
+          "已备草稿": {"type": "integer"},
+          "待生成": {"type": "integer"},
+          "待人工确认": {"type": "integer"},
+          "需改写": {"type": "integer"},
+          "禁止发布": {"type": "integer"},
+          "发布率红线": {"type": "string", "const": "0%"}
+        }
+      },
+      "steps": {"type": "array"},
+      "deliverable": {"type": "string", "description": "out/回复工单.xlsx"}
+    }
+  },
+  "scripts": {
+    "run_flow": "scripts/run_flow.py",
+    "usage": "python3 scripts/run_flow.py --input input.json --outdir out"
+  },
+  "artifacts": ["out/回复工单.xlsx", "out/sentiment.json", "out/voice_check.json",
+                "out/advice_flow_result.json"],
+  "state_machine": ["待人工确认", "需改写", "禁止发布", "待生成"],
+  "thresholds": {
+    "consistency_pass_line": 80,
+    "draft_coverage_floor": 0.8,
+    "veto_share_alert": 0.3,
+    "sla": {"黑粉": "30 分钟", "吐槽": "2 小时", "提问": "4 小时"}
+  },
+  "upstream": ["daily-comment-aggregate-flow"],
+  "constraints": {
+    "publish_rate": 0,
+    "no_bypass_advice": true,
+    "口头禅每条上限": 1,
+    "ai_label_required": true,
+    "human_review_required": true
+  }
+}

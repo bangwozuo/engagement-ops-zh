@@ -1,0 +1,90 @@
+{
+  "workflow_id": "de_media_03_wf04",
+  "name": "铁粉识别与互动名单",
+  "type": "composite",
+  "trigger": "定时（每周一 10:00）",
+  "input": {
+    "type": "object",
+    "required": ["interactions", "weeks"],
+    "properties": {
+      "account": {"type": "string"},
+      "weeks": {"type": "number", "minimum": 1, "description": "统计周期周数，建议 ≥2"},
+      "interactions": {
+        "type": "array",
+        "description": "周互动记录，sentiment 来自评论情感分类",
+        "items": {
+          "type": "object",
+          "required": ["user", "type"],
+          "properties": {
+            "user": {"type": "string"},
+            "type": {"type": "string", "enum": ["comment", "like", "dm", "share", "collect"]},
+            "sentiment": {"type": "string", "enum": ["pos", "neg", "neutral", ""]}
+          }
+        }
+      }
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "skill": "fan-segmentation-tag",
+      "script": "../../skills/fan-segmentation-tag/scripts/segment.py",
+      "input": "interactions + weeks",
+      "output": "out/segment.json",
+      "on_failure": "退出码≠0 中止；空记录占位退出；周期<2周输出噪音警告；sentiment 覆盖率<50% 标红"
+    },
+    {
+      "step": 2,
+      "skill": "（内置）名单加工",
+      "input": "out/segment.json",
+      "output": "out/铁粉维护名单.xlsx",
+      "on_failure": "上游产物缺失中止；铁粉候选为0标「检查阈值」；疑似刷量号标「待模型复核」"
+    },
+    {
+      "step": 3,
+      "skill": "（人工）确认与移交",
+      "input": "名单 + 确认清单",
+      "output": "已移交/已执行动作",
+      "on_failure": "积压>1周名单作废；粉丝状态反转备注作废理由"
+    }
+  ],
+  "output": {
+    "type": "object",
+    "required": ["summary", "steps"],
+    "properties": {
+      "summary": {
+        "type": "object",
+        "properties": {
+          "铁粉候选": {"type": "integer"},
+          "需安抚": {"type": "integer"},
+          "潜在黑粉观察": {"type": "integer"},
+          "TOP 10% 互动占比": {"type": "string"},
+          "人工确认点": {"type": "string"}
+        }
+      },
+      "steps": {"type": "array"},
+      "deliverable": {"type": "string", "description": "out/铁粉维护名单.xlsx"}
+    }
+  },
+  "scripts": {
+    "run_flow": "scripts/run_flow.py",
+    "usage": "python3 scripts/run_flow.py --input input.json --outdir out"
+  },
+  "artifacts": ["out/铁粉维护名单.xlsx", "out/粉丝分层清单.xlsx",
+                "out/粉丝分层结构.png", "out/segment.json", "out/superfan_flow_result.json"],
+  "thresholds": {
+    "superfan": "高频 ≥5 次/周 且 正情感率 ≥60%",
+    "score_weights": {"频次": 0.5, "正情感率": 0.3, "私信深度": 0.2},
+    "cocreation_score_line": 70,
+    "health_top10_share": "≥60%",
+    "sentiment_coverage_floor": 0.5
+  },
+  "downstream": ["reply-script-advice-flow"],
+  "constraints": {
+    "no_auto_outreach": true,
+    "no_list_external_sharing": true,
+    "no_contact_storage": true,
+    "human_review_required": true,
+    "ai_label_required": true
+  }
+}

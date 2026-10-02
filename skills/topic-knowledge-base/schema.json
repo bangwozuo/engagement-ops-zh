@@ -1,0 +1,78 @@
+{
+  "skill_id": "de_media_03_sk05",
+  "name": "选题知识库",
+  "type": "atomic",
+  "input": {
+    "type": "object",
+    "required": ["faq_clusters"],
+    "properties": {
+      "account": {"type": "string", "description": "账号名"},
+      "period": {"type": "string", "description": "统计周期"},
+      "faq_clusters": {
+        "type": "array",
+        "description": "faq-cluster 输出的问题簇（或粘贴的高频问题列表）",
+        "items": {
+          "type": "object",
+          "required": ["代表问题", "提问频次"],
+          "properties": {
+            "代表问题": {"type": "string"},
+            "提问频次": {"type": "integer"},
+            "建议答案要点": {"type": "string"}
+          }
+        }
+      },
+      "existing_topics": {
+        "type": "array",
+        "description": "库内既有选题标题，用于查重；为空则新建库",
+        "items": {"type": "string"}
+      }
+    }
+  },
+  "output": {
+    "type": "object",
+    "required": ["candidates", "health"],
+    "properties": {
+      "candidates": {
+        "type": "array",
+        "description": "本期新增候选条目，全部待人工确认",
+        "items": {
+          "type": "object",
+          "properties": {
+            "选题ID": {"type": "string"},
+            "来源问题簇": {"type": "string"},
+            "提问频次": {"type": "integer"},
+            "优先级": {"type": "string", "enum": ["高", "中", "低"]},
+            "选题建议": {"type": "string"},
+            "查重结果": {"type": "string"},
+            "状态": {"type": "string", "enum": ["待人工确认", "建议淘汰", "已入库", "已拍", "淘汰"]}
+          }
+        }
+      },
+      "health": {
+        "type": "object",
+        "description": "库健康度：总数 / 待确认 / 重复率 / 低优先级占比",
+        "properties": {
+          "库内条目总数": {"type": "integer"},
+          "待人工确认": {"type": "integer"},
+          "重复率": {"type": "string"},
+          "低优先级占比": {"type": "string"},
+          "清理规则": {"type": "string"}
+        }
+      },
+      "need_human": {
+        "type": "array",
+        "description": "勾选入库 / 建议淘汰清单（附依据）",
+        "items": {"type": "string"}
+      }
+    }
+  },
+  "constraints": {
+    "priority_rule": "频次 ≥5 高 / 3-4 中 / <3 低",
+    "dup_threshold": 0.6,
+    "health_thresholds": {"重复率上限": "20%", "低优先级占比上限": "50%"},
+    "entry_states": ["候选", "待人工确认", "已入库", "已拍", "淘汰"],
+    "only_comment_sourced_topics": true,
+    "no_user_nickname_in_db": true,
+    "human_review_required": true
+  }
+}

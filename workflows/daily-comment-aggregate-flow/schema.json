@@ -1,0 +1,88 @@
+{
+  "workflow_id": "de_media_03_wf01",
+  "name": "每日评论聚合分类",
+  "type": "composite",
+  "trigger": "定时（每日 21:00）",
+  "input": {
+    "type": "object",
+    "required": ["comments"],
+    "properties": {
+      "account": {"type": "string"},
+      "platform": {"type": "string", "description": "抖音 / 小红书 / B站 / 公众号"},
+      "date": {"type": "string", "description": "统计日期（00:00-21:00 窗口）"},
+      "comments": {
+        "type": "array",
+        "description": "当日评论流",
+        "items": {
+          "type": "object",
+          "required": ["id", "user", "text"],
+          "properties": {
+            "id": {"type": "string"},
+            "user": {"type": "string"},
+            "text": {"type": "string"},
+            "likes": {"type": "integer"}
+          }
+        }
+      }
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "skill": "comment-sentiment-analyze",
+      "script": "../../skills/comment-sentiment-analyze/scripts/sentiment_scan.py",
+      "input": "comments",
+      "output": "out/sentiment.json",
+      "on_failure": "中止并打印 stderr；空评论进存疑项"
+    },
+    {
+      "step": 2,
+      "skill": "（内置）SLA 队列拆分",
+      "input": "out/sentiment.json",
+      "output": "out/每日评论处理日报.xlsx",
+      "on_failure": "JSON 缺失中止；0 评论输出占位日报正常退出"
+    },
+    {
+      "step": 3,
+      "skill": "（人工）执行队列",
+      "input": "日报处理队列",
+      "output": "处理完成标记",
+      "on_failure": "草稿缺失标待生成；黑粉二次攻击人工隐藏/举报"
+    }
+  ],
+  "output": {
+    "type": "object",
+    "required": ["summary", "steps"],
+    "properties": {
+      "summary": {
+        "type": "object",
+        "properties": {
+          "评论总数": {"type": "integer"},
+          "黑粉": {"type": "integer"},
+          "吐槽": {"type": "integer"},
+          "提问": {"type": "integer"},
+          "赞美": {"type": "integer"},
+          "闲聊": {"type": "integer"},
+          "需 2 小时内处理": {"type": "integer"}
+        }
+      },
+      "steps": {"type": "array", "description": "各步骤执行状态与产物路径"},
+      "deliverable": {"type": "string", "description": "out/每日评论处理日报.xlsx"}
+    }
+  },
+  "scripts": {
+    "run_flow": "scripts/run_flow.py",
+    "usage": "python3 scripts/run_flow.py --input input.json --outdir out"
+  },
+  "artifacts": ["out/每日评论处理日报.xlsx", "out/评论分类处理清单.xlsx",
+                "out/评论情感分布.png", "out/sentiment.json", "out/daily_flow_result.json"],
+  "sla": {"黑粉": "30 分钟", "吐槽": "2 小时", "提问": "4 小时", "赞美": "点赞即可"},
+  "downstream": ["faq-to-topic-flow", "reply-script-advice-flow"],
+  "constraints": {
+    "no_auto_platform_write": true,
+    "dedup_by_comment_id": true,
+    "negative_ratio_alert": 0.5,
+    "ai_label_required": true,
+    "human_review_required": true
+  }
+}

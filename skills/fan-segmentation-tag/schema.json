@@ -1,0 +1,76 @@
+{
+  "skill_id": "de_media_03_sk04",
+  "name": "粉丝分层打标",
+  "type": "atomic",
+  "input": {
+    "type": "object",
+    "required": ["interactions", "weeks"],
+    "properties": {
+      "account": {"type": "string", "description": "账号名"},
+      "weeks": {"type": "number", "minimum": 1, "description": "统计周期周数，建议 ≥2"},
+      "interactions": {
+        "type": "array",
+        "description": "互动记录列表",
+        "items": {
+          "type": "object",
+          "required": ["user", "type"],
+          "properties": {
+            "user": {"type": "string", "description": "粉丝昵称/ID"},
+            "type": {"type": "string", "enum": ["comment", "like", "dm", "share", "collect"]},
+            "sentiment": {"type": "string", "enum": ["pos", "neg", "neutral", ""],
+                          "description": "情感标注，来自 comment-sentiment-analyze"}
+          }
+        }
+      }
+    }
+  },
+  "output": {
+    "type": "object",
+    "required": ["summary", "items"],
+    "properties": {
+      "summary": {
+        "type": "object",
+        "description": "粉丝总数 / 铁粉候选 / 需安抚 / 黑粉观察 / TOP 10% 互动占比",
+        "properties": {
+          "粉丝总数": {"type": "integer"},
+          "铁粉候选数": {"type": "integer"},
+          "需安抚数": {"type": "integer"},
+          "潜在黑粉观察数": {"type": "integer"},
+          "TOP 10% 粉丝互动占比": {"type": "string"}
+        }
+      },
+      "items": {
+        "type": "array",
+        "description": "逐人分层结果，按铁粉评分降序",
+        "items": {
+          "type": "object",
+          "properties": {
+            "用户": {"type": "string"},
+            "周均互动": {"type": "number"},
+            "频次档": {"type": "string", "enum": ["高频", "中频", "低频"]},
+            "正情感率": {"type": "string"},
+            "分层标签": {"type": "string",
+                         "enum": ["铁粉候选", "高潜互动", "需安抚", "活跃粉丝", "普通互动",
+                                  "预警观察", "好感路人", "路人", "潜在黑粉观察"]},
+            "铁粉评分": {"type": "number", "minimum": 0, "maximum": 100},
+            "建议动作": {"type": "string"}
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "segment": "scripts/segment.py",
+    "usage": "python3 scripts/segment.py --input input.json --outdir out"
+  },
+  "artifacts": ["out/粉丝分层清单.xlsx", "out/粉丝分层结构.png", "out/segment.json"],
+  "constraints": {
+    "freq_thresholds_per_week": {"高频": 5, "中频": 2, "低频": 0},
+    "sentiment_thresholds": {"正面": 0.6, "中性": 0.4},
+    "superfan_score_weights": {"频次": 0.5, "正情感率": 0.3, "私信深度": 0.2},
+    "benchmark": "1% 超级用户约贡献 90% 互动",
+    "min_stat_weeks": 2,
+    "no_public_segmentation": true,
+    "human_review_required": true
+  }
+}

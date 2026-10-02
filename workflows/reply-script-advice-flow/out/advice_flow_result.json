@@ -1,0 +1,43 @@
+{
+  "flow": "reply-script-advice-flow",
+  "steps": [
+    {
+      "step": 1,
+      "skill": "comment-sentiment-analyze",
+      "status": "ok",
+      "output": "out\\sentiment.json"
+    },
+    {
+      "step": 2,
+      "skill": "persona-voice-library",
+      "status": "ok",
+      "output": "out\\voice_check.json"
+    },
+    {
+      "step": 3,
+      "skill": "reply-script-generate（工单对齐/缺稿标记）",
+      "status": "ok",
+      "output": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\engagement-ops-zh\\workflows\\reply-script-advice-flow\\out\\回复工单.xlsx"
+    }
+  ],
+  "summary": {
+    "账号": "@小鹿的好物日记",
+    "日期": "2026-09-29",
+    "高优评论数": 6,
+    "黑粉/吐槽/提问": "1/2/3",
+    "已备草稿": 5,
+    "待生成": 1,
+    "待人工确认": 3,
+    "需改写": 1,
+    "禁止发布": 1,
+    "发布率红线": "0% —— 脚本与模型均不执行发布；所有回复经人工确认后才对外",
+    "覆盖率参考": "高优评论草稿覆盖率 < 80% 说明备稿不足，需扩大 draft 覆盖",
+    "说明": "工单为机器对齐结果；草稿生成与语气润色由模型按 prompt.txt 完成"
+  },
+  "files": [
+    "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\engagement-ops-zh\\workflows\\reply-script-advice-flow\\out\\回复工单.xlsx",
+    "out\\sentiment.json",
+    "out\\voice_check.json"
+  ],
+  "generated_at": "2026-09-30 16:02:59"
+}

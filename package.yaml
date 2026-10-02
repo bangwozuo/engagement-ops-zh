@@ -1,0 +1,49 @@
+name: 评论运营官
+repo: bangwozuo/engagement-ops-zh
+legacy_name: 评论区运营官
+version: 0.2.0
+asset_type: prompt-only
+stage: P0
+complexity: M：评论数据连接器为最大不确定项（Mock 可降级为 S），总估 6-10 人日
+group: 自媒体创作者
+runtime_dependencies: none
+api_key_required: false
+demand_ids:
+  - D01
+  - D08
+
+workflows:
+  - name: 每日评论聚合分类
+    id: de_media_03_wf01
+  - name: 高频问题转选题
+    id: de_media_03_wf02
+  - name: 回复话术建议
+    id: de_media_03_wf03
+  - name: 铁粉识别与互动名单
+    id: de_media_03_wf04
+
+skills:
+  - id: comment-sentiment-analyze
+    name: 评论情感分析
+    family: 
+  - id: faq-cluster
+    name: 高频问题聚类
+    family: 
+  - id: reply-script-generate
+    name: 回复话术生成
+    family: 
+  - id: fan-segmentation-tag
+    name: 粉丝分层打标
+    family: 
+  - id: topic-knowledge-base
+    name: 选题知识库
+    family: 
+  - id: persona-voice-library
+    name: 人设语气库
+    family: 
+
+compliance:
+  ai_label_required: true
+  human_review_required: true
+  forbidden_words_check: true
+  official_api_only: true

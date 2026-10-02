@@ -1,0 +1,79 @@
+{
+  "skill_id": "de_media_03_sk01",
+  "name": "评论情感分析",
+  "type": "atomic",
+  "input": {
+    "type": "object",
+    "required": ["comments"],
+    "properties": {
+      "comments": {
+        "type": "array",
+        "description": "评论列表，元素含 id/user/text/likes",
+        "items": {
+          "type": "object",
+          "required": ["id", "user", "text"],
+          "properties": {
+            "id": {"type": "string", "description": "评论ID，如 C001"},
+            "user": {"type": "string", "description": "评论用户昵称"},
+            "text": {"type": "string", "description": "评论内容"},
+            "likes": {"type": "integer", "description": "点赞数，缺省按 0"}
+          }
+        }
+      },
+      "account": {"type": "string", "description": "账号名，写入汇总"},
+      "platform": {"type": "string", "description": "抖音 / 小红书 / B站 / 公众号 / 通用"},
+      "date": {"type": "string", "description": "统计日期，如 2026-09-29"}
+    }
+  },
+  "output": {
+    "type": "object",
+    "required": ["summary", "items"],
+    "properties": {
+      "summary": {
+        "type": "object",
+        "description": "汇总：总数 / 四分类计数 / 占比 / 需 2 小时内处理条数",
+        "properties": {
+          "评论总数": {"type": "integer"},
+          "黑粉": {"type": "integer"},
+          "吐槽": {"type": "integer"},
+          "提问": {"type": "integer"},
+          "赞美": {"type": "integer"},
+          "闲聊": {"type": "integer"},
+          "黑粉占比": {"type": "string"},
+          "负类合计占比": {"type": "string"},
+          "需 2 小时内处理条数": {"type": "integer"}
+        }
+      },
+      "items": {
+        "type": "array",
+        "description": "逐条分类结果，按 SLA 优先级排序",
+        "items": {
+          "type": "object",
+          "properties": {
+            "评论ID": {"type": "string"},
+            "用户": {"type": "string"},
+            "评论内容": {"type": "string"},
+            "类别": {"type": "string", "enum": ["黑粉", "吐槽", "提问", "赞美", "闲聊"]},
+            "情绪强度": {"type": "integer", "minimum": 1, "maximum": 5},
+            "处理时限(SLA)": {"type": "string"},
+            "建议动作": {"type": "string"},
+            "命中依据": {"type": "string"}
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "scan": "scripts/sentiment_scan.py",
+    "usage": "python3 scripts/sentiment_scan.py --input input.json --outdir out"
+  },
+  "artifacts": ["out/评论分类处理清单.xlsx", "out/评论情感分布.png", "out/sentiment.json"],
+  "constraints": {
+    "sla_minutes": {"黑粉": 30, "吐槽": 120, "提问": 240, "赞美": 0},
+    "intensity_scale": [1, 5],
+    "no_fighting_with_trolls": true,
+    "no_deleting_negative_comments": true,
+    "ai_label_required": true,
+    "human_review_required": true
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "skill_id": "de_media_03_sk03",
+  "name": "回复话术生成",
+  "type": "atomic",
+  "input": {
+    "type": "object",
+    "required": ["comments", "voice"],
+    "properties": {
+      "comments": {
+        "type": "array",
+        "description": "待回复评论列表，category 来自 comment-sentiment-analyze",
+        "items": {
+          "type": "object",
+          "required": ["id", "user", "text", "category"],
+          "properties": {
+            "id": {"type": "string"},
+            "user": {"type": "string"},
+            "text": {"type": "string"},
+            "category": {"type": "string", "enum": ["提问", "赞美", "吐槽", "黑粉", "闲聊"]},
+            "likes": {"type": "integer"}
+          }
+        }
+      },
+      "voice": {
+        "type": "object",
+        "description": "语气库档案，来自 persona-voice-library",
+        "required": ["称呼"],
+        "properties": {
+          "persona": {"type": "string"},
+          "platform": {"type": "string"},
+          "称呼": {"type": "array", "items": {"type": "string"}},
+          "口头禅": {"type": "array", "items": {"type": "string"}},
+          "句长上限": {"type": "integer", "default": 20},
+          "禁用词": {"type": "array", "items": {"type": "string"}}
+        }
+      },
+      "faq": {
+        "type": "array",
+        "description": "FAQ 库 Top10（可选；命中时引用标准答案要点）",
+        "items": {
+          "type": "object",
+          "properties": {
+            "标准问法": {"type": "string"},
+            "建议答案要点": {"type": "string"}
+          }
+        }
+      }
+    }
+  },
+  "output": {
+    "type": "object",
+    "required": ["drafts", "self_check"],
+    "properties": {
+      "drafts": {
+        "type": "array",
+        "description": "回复草稿，按 SLA 优先级排序，逐条待人工确认",
+        "items": {
+          "type": "object",
+          "properties": {
+            "评论ID": {"type": "string"},
+            "类别": {"type": "string"},
+            "回复草稿": {"type": "string"},
+            "字数": {"type": "integer", "minimum": 15, "maximum": 60},
+            "策略说明": {"type": "string"},
+            "状态": {"type": "string", "const": "待人工确认"}
+          }
+        }
+      },
+      "self_check": {
+        "type": "object",
+        "description": "逐批自检：称呼/口头禅命中率 ≥80% 达标",
+        "properties": {
+          "称呼命中率": {"type": "string"},
+          "口头禅每条数": {"type": "string"},
+          "禁用词命中": {"type": "integer"},
+          "合规词命中": {"type": "integer"}
+        }
+      },
+      "need_human": {
+        "type": "array",
+        "description": "建议置顶 / 建议隐藏举报的评论清单",
+        "items": {"type": "string"}
+      }
+    }
+  },
+  "constraints": {
+    "draft_length": {"min": 15, "max": 60},
+    "sentence_len_max": 20,
+    "口头禅每条上限": 1,
+    "consistency_pass_line": 0.8,
+    "sla_order": ["黑粉", "吐槽", "提问", "赞美"],
+    "forbidden": ["效果承诺", "绝对化用语", "站外导流", "对线反讽", "万能模板群发"],
+    "ai_label_required": true,
+    "human_review_required": true
+  }
+}

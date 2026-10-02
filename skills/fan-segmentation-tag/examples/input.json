@@ -1,0 +1,266 @@
+{
+  "account": "@小鹿的好物日记",
+  "weeks": 2,
+  "interactions": [
+    {
+      "user": "奶盖不加糖",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "奶盖不加糖",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "奶盖不加糖",
+      "type": "dm",
+      "sentiment": "neutral"
+    },
+    {
+      "user": "奶盖不加糖",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "奶盖不加糖",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "奶盖不加糖",
+      "type": "collect",
+      "sentiment": ""
+    },
+    {
+      "user": "奶盖不加糖",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "奶盖不加糖",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "奶盖不加糖",
+      "type": "share",
+      "sentiment": ""
+    },
+    {
+      "user": "奶盖不加糖",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "美妆课代表",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "美妆课代表",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "美妆课代表",
+      "type": "share",
+      "sentiment": ""
+    },
+    {
+      "user": "美妆课代表",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "美妆课代表",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "美妆课代表",
+      "type": "comment",
+      "sentiment": "neutral"
+    },
+    {
+      "user": "美妆课代表",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "美妆课代表",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "美妆课代表",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "美妆课代表",
+      "type": "collect",
+      "sentiment": ""
+    },
+    {
+      "user": "cccccc",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "cccccc",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "cccccc",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "cccccc",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "cccccc",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "cccccc",
+      "type": "share",
+      "sentiment": ""
+    },
+    {
+      "user": "cccccc",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "cccccc",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "cccccc",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "cccccc",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "打工人小王",
+      "type": "comment",
+      "sentiment": "neg"
+    },
+    {
+      "user": "打工人小王",
+      "type": "comment",
+      "sentiment": "neg"
+    },
+    {
+      "user": "打工人小王",
+      "type": "comment",
+      "sentiment": "neutral"
+    },
+    {
+      "user": "打工人小王",
+      "type": "comment",
+      "sentiment": "neg"
+    },
+    {
+      "user": "打工人小王",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "打工人小王",
+      "type": "comment",
+      "sentiment": "neg"
+    },
+    {
+      "user": "打工人小王",
+      "type": "comment",
+      "sentiment": "neg"
+    },
+    {
+      "user": "打工人小王",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "打工人小王",
+      "type": "comment",
+      "sentiment": "neg"
+    },
+    {
+      "user": "打工人小王",
+      "type": "comment",
+      "sentiment": "neutral"
+    },
+    {
+      "user": "油皮亲妈",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "油皮亲妈",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "油皮亲妈",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "油皮亲妈",
+      "type": "comment",
+      "sentiment": "neutral"
+    },
+    {
+      "user": "蹲链接选手",
+      "type": "comment",
+      "sentiment": "neutral"
+    },
+    {
+      "user": "蹲链接选手",
+      "type": "comment",
+      "sentiment": "neutral"
+    },
+    {
+      "user": "点点点",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "点点点",
+      "type": "comment",
+      "sentiment": "pos"
+    },
+    {
+      "user": "点点点",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "路过的路人",
+      "type": "like",
+      "sentiment": ""
+    },
+    {
+      "user": "今天也很困",
+      "type": "comment",
+      "sentiment": "neg"
+    },
+    {
+      "user": "匿名潜水员",
+      "type": "comment",
+      "sentiment": "neutral"
+    }
+  ]
+}

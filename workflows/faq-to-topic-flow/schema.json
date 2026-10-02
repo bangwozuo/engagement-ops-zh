@@ -1,0 +1,87 @@
+{
+  "workflow_id": "de_media_03_wf02",
+  "name": "高频问题转选题",
+  "type": "composite",
+  "trigger": "事件（daily-comment-aggregate-flow 完成后自动衔接）",
+  "input": {
+    "type": "object",
+    "required": ["questions"],
+    "properties": {
+      "account": {"type": "string"},
+      "period": {"type": "string", "description": "统计周期"},
+      "existing_topics": {
+        "type": "array",
+        "description": "库内既有选题，用于查重",
+        "items": {"type": "string"}
+      },
+      "questions": {
+        "type": "array",
+        "description": "提问类评论流（上游四分类筛出）",
+        "items": {"type": "string"}
+      }
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "skill": "faq-cluster",
+      "script": "../../skills/faq-cluster/scripts/faq_cluster.py",
+      "input": "questions",
+      "output": "out/faq_cluster.json",
+      "on_failure": "退出码≠0 中止；无实义输入标「输入无效」；覆盖率<60% 标「问题过散」继续"
+    },
+    {
+      "step": 2,
+      "skill": "topic-knowledge-base",
+      "input": "out/faq_cluster.json + existing_topics",
+      "output": "out/选题库新增条目.xlsx",
+      "on_failure": "上游产物缺失中止；全重复标「无新增，跳过入库」"
+    },
+    {
+      "step": 3,
+      "skill": "（人工）确认入库",
+      "input": "候选条目",
+      "output": "已入库/已拍条目",
+      "on_failure": "语义近似重复模型复核；积压 2 周标红、4 周降级"
+    }
+  ],
+  "output": {
+    "type": "object",
+    "required": ["summary", "steps"],
+    "properties": {
+      "summary": {
+        "type": "object",
+        "properties": {
+          "候选选题数": {"type": "integer"},
+          "查重后新增": {"type": "integer"},
+          "与既有库重复": {"type": "integer"},
+          "高优先级选题": {"type": "integer"},
+          "上游聚类簇数": {"type": "integer"},
+          "Top10 覆盖率": {"type": "string"}
+        }
+      },
+      "steps": {"type": "array"},
+      "deliverable": {"type": "string", "description": "out/选题库新增条目.xlsx"}
+    }
+  },
+  "scripts": {
+    "run_flow": "scripts/run_flow.py",
+    "usage": "python3 scripts/run_flow.py --input input.json --outdir out"
+  },
+  "artifacts": ["out/选题库新增条目.xlsx", "out/高频问题聚类.xlsx",
+                "out/faq_top10.png", "out/faq_cluster.json", "out/topic_flow_result.json"],
+  "thresholds": {
+    "merge_similarity": 0.6,
+    "priority": {"高": "频次 ≥5", "中": "3-4", "低": "<3"},
+    "coverage_floor": 0.6,
+    "library_health": {"重复率上限": "20%", "低优先级占比上限": "50%"}
+  },
+  "upstream": ["daily-comment-aggregate-flow"],
+  "constraints": {
+    "no_auto_insert_to_library": true,
+    "only_comment_sourced_topics": true,
+    "frequency_traceable": true,
+    "ai_label_required": true,
+    "human_review_required": true
+  }
+}
