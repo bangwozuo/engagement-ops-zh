@@ -7,6 +7,8 @@
 
 ![输出预览](docs/assets/run-terminal.png)
 
+![演示视频](docs/assets/demo.mp4)
+
 *上图为实跑产物预览（经 faq-to-topic-flow 实跑生成）：13 个问题簇 → 10 条候选选题，查重后新增 9、与既有库重复 1（T009 建议淘汰），全部「待人工确认」。*
 
 ---

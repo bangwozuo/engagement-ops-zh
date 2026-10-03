@@ -7,6 +7,8 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
+![演示视频](docs/assets/demo.mp4)
+
 *上图来自真实执行：23 条提问 → 归一化 22 个独立问法 → 13 簇，Top 10 覆盖率 87%（≥60% 下限，判定正常），产物落盘 Excel + PNG + JSON。*
 
 ---

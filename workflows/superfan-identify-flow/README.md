@@ -7,6 +7,8 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
+![演示视频](docs/assets/demo.mp4)
+
 *上图来自真实执行：2 周互动数据、6 名粉丝 → 铁粉候选 2 / 需安抚 1 / 黑粉观察 1，TOP 10% 互动占比 28%（<60% 健康线，判定核心粉沉淀期），产物落盘铁粉维护名单.xlsx + segment.json。*
 
 ---

@@ -7,6 +7,8 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
+![演示视频](docs/assets/demo.mp4)
+
 *上图来自真实执行：6 条回复草稿逐条打分 → 达标 4（67%）、合规否决 1（D4：100% 保证 + 加微信 + 绝绝子，一票否决禁止发布）、需改写 1，产物落盘 Excel + PNG + JSON。*
 
 ---

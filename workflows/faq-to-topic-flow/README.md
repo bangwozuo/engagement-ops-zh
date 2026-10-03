@@ -7,6 +7,8 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
+![演示视频](docs/assets/demo.mp4)
+
 *上图来自真实执行：23 条提问 → 13 簇 → 候选选题 10 条，查重后新增 9 条（全部「待人工确认」），产物落盘选题库新增条目.xlsx + faq_cluster.json。*
 
 ---
