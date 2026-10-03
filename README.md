@@ -3,37 +3,49 @@
 > **把评论区从"成本中心"变成"选题矿藏"的运营副手**
 
 [![Stage](https://img.shields.io/badge/stage-P0-orange)](https://github.com/bangwozuo)
-[![Asset](https://img.shields.io/badge/asset-prompt--only-blueviolet)](#资产形态)
-[![NoKey](https://img.shields.io/badge/API%20Key-not%20required-success)](#资产形态)
+[![Asset](https://img.shields.io/badge/asset-prompt%20%2B%20scripts-blueviolet)](#资产矩阵)
+[![NoKey](https://img.shields.io/badge/API%20Key-not%20required-success)](#资产校验)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+
+![演示](docs/demo.mp4)
+
+*上图为仓库实跑演示（5 个代表资产 × 4 秒）：评论情感四分类 → 高频问题聚类 → 回复工单 → 问题转选题 → 铁粉名单，全部来自 `--run` 真实执行的终端截图。*
 
 ---
 
-## 它是谁
-
-面向 **自媒体创作者** 的数字员工资产包。
+## 数字员工总览
 
 | 项目 | 内容 |
 |------|------|
-| 目标用户 | 万粉以上创作者（评论量达到人工处理瓶颈的阈值） |
-| 交付物 | 评论处理时长从 1-2h 压缩至 ≤20 分钟；高频问题→选题转化率 ≥10%/周；回复人设一致性质检通过率 ≥95% |
-| 技能数 | 6 |
-| 工作流数 | 4 |
-| 旧名存档 | `评论区运营官` |
+| 身份 | 面向**自媒体创作者**（万粉以上、评论量达到人工处理瓶颈）的评论运营副手 |
+| 能力 | 评论四分类与 SLA 排序 · 高频问题聚类转选题 · 人设一致的回复草稿与质检 · 粉丝九宫格分层与铁粉名单 |
+| 交付物 | 评论处理时长 1-2h → ≤20 分钟；高频问题→选题转化率 ≥10%/周；回复人设一致性质检通过率 ≥95% |
+| 边界 | 只产队列/草稿/名单——**发布、隐藏、举报、私信、移交私域全部人工执行，发布率红线 0%** |
+| KPI | 单日评论处理人工介入前 ≤5 分钟；选题库月度采纳率与评论区播放表现可回溯 |
 
 ---
 
-## 资产形态
+## 资产矩阵
 
-**纯提示词资产** —— 这是理解本仓库的关键：
+### 技能（6 个）
 
-| 特性 | 说明 |
-|------|------|
-| ✅ 无需 API Key | 一个 Key 都不需要 |
-| ✅ 无需部署 | 没有服务端，没有脚本 |
-| ✅ 无需依赖 | 克隆后用文本编辑器就能看 |
-| ✅ 平台无关 | 粘贴到任何 AI 工具即可使用 |
-| ✅ 用户自备算力 | 模型来自你自己的订阅 |
+| 技能 | 一句话 | 类型 | README |
+|------|--------|------|--------|
+| 评论情感分析 | 评论四分类 + 情绪强度 1-5 + SLA 排序（黑粉 30 分钟/吐槽 2h/提问 4h） | T1 产物型（脚本） | [README](skills/comment-sentiment-analyze/README.md) |
+| 高频问题聚类 | 双通道相似度 ≥0.60 聚类，Top 10 问题榜 + 可粘贴答案要点，覆盖率自检 | T1 产物型（脚本） | [README](skills/faq-cluster/README.md) |
+| 人设语气库 | 语气库档案 + 草稿一致性打分（称呼40/口头禅20/句长20/零违禁20），合规否决一票制 | T1 产物型（脚本） | [README](skills/persona-voice-library/README.md) |
+| 粉丝分层打标 | 频次 × 情感九宫格 + 铁粉评分 0-100，感谢/安抚/观察三张名单 | T1 产物型（脚本） | [README](skills/fan-segmentation-tag/README.md) |
+| 回复话术生成 | 三类评论三套策略，写出能直接粘贴、过一致性检查的回复草稿 | T2 提示词型 | [README](skills/reply-script-generate/README.md) |
+| 选题知识库 | 问题簇 → 查重 → 优先级 → 可开拍选题条目，库健康度双指标体检 | T4 连接器型 | [README](skills/topic-knowledge-base/README.md) |
+
+### 工作流（4 条）
+
+| 工作流 | 一句话 | 触发 | README |
+|--------|--------|------|--------|
+| 每日评论聚合分类 | 当日评论 → SLA 处理队列日报，双异常信号（负类>50% / 提问>40%） | 定时（每日 21:00） | [README](workflows/daily-comment-aggregate-flow/README.md) |
+| 高频问题转选题 | 聚类 → 排榜 → 查重 → 选题条目（全部待人工确认），评论区需求不烂尾 | 事件（WF1 后自动） | [README](workflows/faq-to-topic-flow/README.md) |
+| 回复话术建议 | 高优评论 → 四态回复工单（待确认/需改写/禁止发布/待生成），达标线 80 分 | 人工/事件 | [README](workflows/reply-script-advice-flow/README.md) |
+| 铁粉识别与互动名单 | 九宫格分层 → 铁粉维护名单 + 私域移交确认清单 | 定时（每周一 10:00） | [README](workflows/superfan-identify-flow/README.md) |
 
 ---
 
@@ -46,7 +58,15 @@
 4. 按 SKILL.md 的输入规格提供数据
 ```
 
-就这四步。完整指引见 [使用手册](docs/04-usage.md)。
+带脚本的资产（T1/工作流）可直接真实执行，无需 API Key：
+
+```bash
+pip install -r requirements.txt
+cd skills/comment-sentiment-analyze
+python scripts/sentiment_scan.py --demo   # 内置真实样例，产物落盘 out/
+```
+
+完整指引见 [使用手册](docs/04-usage.md)。
 
 ---
 
@@ -55,38 +75,23 @@
 ```text
 engagement-ops-zh/
 ├── README.md / employee.md / package.yaml     # 入口与 12 字段定义卡
+├── docs/demo.mp4                              # 仓库实跑演示视频（5 镜头）
 ├── docs/01~07                                 # 员工级文档（架构/流程/场景/手册/示例/录像/测试）
 ├── skills/                                    # 6 个原子技能
 │   └── <skill>/
 │       ├── README.md  SKILL.md  prompt.txt  schema.json  examples/
-│       └── docs/                              # 该技能自己的 10 项文档 + 配图
-├── workflows/                                 # 4 条工作流（复合技能）
+│       ├── scripts/                           # T1 技能自带确定性脚本（真实执行 → Excel/PNG/JSON）
+│       └── docs/                              # 9 项文档 + run-terminal.png 实跑截图
+├── workflows/                                 # 4 条工作流（端到端编排脚本）
 │   └── <workflow>/
 │       ├── README.md  SKILL.md  prompt.txt  schema.json  examples/
-│       └── docs/                              # 该工作流自己的 10 项文档 + 配图
+│       ├── scripts/run_flow.py                # 调用真实技能 slug 的 DAG 编排
+│       └── docs/                              # 9 项文档 + run-terminal.png 实跑截图
 ├── knowledge/                                 # RAG wiki 知识库
-│   ├── README.md  RAG-接入指南.md  template.md
-│   └── wiki/(index.md, _template.md, entries/)
 ├── connectors/                                # 连接器说明 + 合规红线
 ├── quality/                                   # 效果基线与追踪日志
 └── tests/                                     # 资产校验测试（离线，无需密钥）
 ```
-
-### 每个技能 / 工作流自带的 docs
-
-| 文档 | 内容 |
-|------|------|
-| `README.md` | 资产速览与快速开始 |
-| `docs/01-usage-manual.md` | 安装使用手册 |
-| `docs/02-architecture.md` | 业务架构图 |
-| `docs/03-flow.md` | 流程图（Mermaid + 配图） |
-| `docs/04-examples.md` | 使用示例 |
-| `docs/05-media.md` | 截图和录屏（清单 + 分镜脚本） |
-| `docs/06-scenarios.md` | 使用场景（适用 / 不适用） |
-| `docs/07-audience.md` | 用户群体 |
-| `docs/08-value.md` | 解决问题与价值 |
-| `docs/09-test-report.md` | 测试报告 |
-| `docs/assets/overview.svg` | 自动生成的流程示意图 |
 
 ---
 
@@ -101,37 +106,6 @@ engagement-ops-zh/
 | [示例库](docs/05-examples.md) | 6 组输入输出示例 |
 | [录像脚本](docs/06-recording-script.md) | 7 镜头分镜 + 旁白稿 |
 | [校验报告](docs/07-test-report.md) | 资产质量校验结果 |
-
----
-
-## 技能清单（6 个）
-
-| # | 技能 | 能力族 | 复杂度 | 提示词 | 文档 |
-|---|------|--------|--------|--------|------|
-| 1 | 评论情感分析 | 分类打标 | `M` | [prompt.txt](skills/comment-sentiment-analyze/prompt.txt) | [docs](skills/comment-sentiment-analyze/docs/) |
-| 2 | 高频问题聚类 | 摘要提炼 | `M` | [prompt.txt](skills/faq-cluster/prompt.txt) | [docs](skills/faq-cluster/docs/) |
-| 3 | 回复话术生成 | 回复应答 | `S` | [prompt.txt](skills/reply-script-generate/prompt.txt) | [docs](skills/reply-script-generate/docs/) |
-| 4 | 粉丝分层打标 | 分类打标 | `S` | [prompt.txt](skills/fan-segmentation-tag/prompt.txt) | [docs](skills/fan-segmentation-tag/docs/) |
-| 5 | 选题知识库 | 知识检索 | `S` | [prompt.txt](skills/topic-knowledge-base/prompt.txt) | [docs](skills/topic-knowledge-base/docs/) |
-| 6 | 人设语气库 | 文案生成 | `S` | [prompt.txt](skills/persona-voice-library/prompt.txt) | [docs](skills/persona-voice-library/docs/) |
-
-## 工作流清单（4 条）
-
-| # | 工作流 | 阶段 | 复杂度 | 触发 | 定义 | 文档 |
-|---|--------|------|--------|------|------|------|
-| 1 | 每日评论聚合分类 | `P0` | `M` | 定时（每日 21:00） | [SKILL.md](workflows/daily-comment-aggregate-flow/SKILL.md) | [docs](workflows/daily-comment-aggregate-flow/docs/) |
-| 2 | 高频问题转选题 | `P0` | `M` | 事件（WF1 后自动） | [SKILL.md](workflows/faq-to-topic-flow/SKILL.md) | [docs](workflows/faq-to-topic-flow/docs/) |
-| 3 | 回复话术建议 | `P0` | `S` | 人工/事件 | [SKILL.md](workflows/reply-script-advice-flow/SKILL.md) | [docs](workflows/reply-script-advice-flow/docs/) |
-| 4 | 铁粉识别与互动名单 | `P1` | `S` | 定时（每周） | [SKILL.md](workflows/superfan-identify-flow/SKILL.md) | [docs](workflows/superfan-identify-flow/docs/) |
-
----
-
-## 知识库与连接器
-
-| 目录 | 说明 |
-|------|------|
-| [`knowledge/`](knowledge/README.md) | RAG wiki 知识库：填入业务信息可显著提升输出质量 |
-| [`connectors/`](connectors/README.md) | 连接器说明：数据从哪来、怎么合规地来 |
 
 ---
 
@@ -153,7 +127,7 @@ pytest tests/ -v
 - ✅ 提示词内置**违禁词禁止清单**，符合《广告法》要求
 - ✅ 遵循《人工智能生成合成内容标识办法》
 - ✅ 连接器只走**官方 API** 或**用户导出数据**
-- ✅ 所有对外发布动作**保留人工确认环节**
+- ✅ 所有对外发布动作**保留人工确认环节**（发布率红线 0%）
 
 ---
 
@@ -163,4 +137,4 @@ pytest tests/ -v
 
 ---
 
-*由 bangwozuo 业务库自动生成 · 2026-09-29*
+*由 bangwozuo 业务库自动生成 · 2026-09-29 · README 投产级改造 2026-10-03*
