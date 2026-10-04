@@ -7,7 +7,7 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
-![演示视频](docs/assets/demo.mp4)
+🎬 **[▶ 观看演示视频](docs/assets/demo.mp4)** — 四幕数据叙事：业务钩子 → 真实执行 → 指标条形图生长 → 交付物
 
 *上图来自真实执行：12 条内置样例评论 → 黑粉 2 / 吐槽 3 / 提问 3 / 赞美 3 / 闲聊 1，5 条需 2 小时内处理，产物落盘 Excel + PNG + JSON。*
 

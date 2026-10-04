@@ -7,7 +7,9 @@
 [![NoKey](https://img.shields.io/badge/API%20Key-not%20required-success)](#资产校验)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
 
-![演示](docs/demo.mp4)
+![演示](docs/assets/hero.gif)
+
+*▲ 实时演示（自动循环）· [▶ 观看完整版合集视频](docs/demo.mp4)*
 
 *上图为仓库实跑演示（5 个代表资产 × 4 秒）：评论情感四分类 → 高频问题聚类 → 回复工单 → 问题转选题 → 铁粉名单，全部来自 `--run` 真实执行的终端截图。*
 
