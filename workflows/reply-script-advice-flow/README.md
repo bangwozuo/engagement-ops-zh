@@ -7,7 +7,7 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
-🎬 **[▶ 观看演示视频](docs/assets/demo.mp4)** — 四幕数据叙事：业务钩子 → 真实执行 → 指标条形图生长 → 交付物
+🎬 **[▶ 观看演示视频（在线播放）](https://cdn.jsdelivr.net/gh/bangwozuo/engagement-ops-zh@main/workflows/reply-script-advice-flow/docs/assets/demo.mp4) · [GitHub 页](https://github.com/bangwozuo/engagement-ops-zh/blob/main/workflows/reply-script-advice-flow/docs/assets/demo.mp4)** — 四幕数据叙事：业务钩子 → 真实执行 → 指标条形图生长 → 交付物
 
 *上图来自真实执行：高优评论 6 条（黑粉 1/吐槽 2/提问 3）→ 待人工确认 3 / 需改写 1 / 禁止发布 1 / 待生成 1，草稿覆盖率 83%（≥80% 未触发备稿不足），产物落盘回复工单.xlsx + sentiment.json + voice_check.json。*
 
